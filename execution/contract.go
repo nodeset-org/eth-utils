@@ -1,4 +1,4 @@
-package ethutils
+package execution
 
 import (
 	"github.com/ethereum/go-ethereum/accounts/abi"
