@@ -38,13 +38,13 @@ type TransactionManager struct {
 	multiplier float64
 
 	// The client to use for running transaction simulations
-	client ExecutionClient
+	client IExecutionClient
 }
 
 // Creates a new transaction manager, which can simulate and execute transactions.
 // The simulator determines if transactions will complete without reversion and provides a safe gas limit suggestion.
 // The formula for safe gas calculation is estimate * multiplier + buffer, where the buffer is in gwei.
-func NewTransactionManager(client ExecutionClient, safeGasBuffer uint64, safeGasMultiplier float64) (*TransactionManager, error) {
+func NewTransactionManager(client IExecutionClient, safeGasBuffer uint64, safeGasMultiplier float64) (*TransactionManager, error) {
 	if safeGasMultiplier != 0 && safeGasMultiplier < 1 {
 		return nil, fmt.Errorf("multiplier cannot be less than 1")
 	}
@@ -75,7 +75,7 @@ func (t *TransactionManager) GetSafeGasLimit(estimate uint64) (uint64, error) {
 }
 
 // Simulates the transaction, getting the expected and safe gas limits in gwei.
-func (t *TransactionManager) SimulateTransaction(client ExecutionClient, to common.Address, opts *bind.TransactOpts, input []byte) SimulationResult {
+func (t *TransactionManager) SimulateTransaction(client IExecutionClient, to common.Address, opts *bind.TransactOpts, input []byte) SimulationResult {
 	// Estimate gas limit
 	gasLimit, err := client.EstimateGas(context.Background(), ethereum.CallMsg{
 		From:      opts.From,

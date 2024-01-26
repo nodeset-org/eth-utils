@@ -12,7 +12,7 @@ import (
 // Manages multicall-capable queries to the Execution layer.
 type QueryManager struct {
 	// The client to use when querying the chain.
-	client ExecutionClient
+	client IExecutionClient
 
 	// Address of the multicall contract to use.
 	multicallAddress common.Address
@@ -23,7 +23,7 @@ type QueryManager struct {
 
 // Creates a new query manager.
 // concurrentCallLimit should be the maximum number of batches to query in parallel for batch calls. Negative values mean no limit.
-func NewQueryManager(client ExecutionClient, multicallAddress common.Address, concurrentCallLimit int) *QueryManager {
+func NewQueryManager(client IExecutionClient, multicallAddress common.Address, concurrentCallLimit int) *QueryManager {
 	return &QueryManager{
 		client:           client,
 		multicallAddress: multicallAddress,

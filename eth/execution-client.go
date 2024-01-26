@@ -10,7 +10,7 @@ import (
 )
 
 // This is the common interface for execution clients that implement most of Geth's core functionality.
-type ExecutionClient interface {
+type IExecutionClient interface {
 
 	/// ========================
 	/// ContractCaller Functions
