@@ -1,6 +1,7 @@
 package beacon
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/goccy/go-json"
@@ -15,12 +16,17 @@ const (
 // A signature produced by a validator's private key.
 type ValidatorSignature [ValidatorSignatureLength]byte
 
-// Gets the string representation of the signature with a 0x prefix.
+// Gets the string representation of the signature without a 0x prefix.
 func (v ValidatorSignature) Hex() string {
-	return common.EncodeHexWithPrefix(v[:])
+	return hex.EncodeToString(v[:])
 }
 
 // Gets the string representation of the signature with a 0x prefix.
+func (v ValidatorSignature) HexWithPrefix() string {
+	return common.EncodeHexWithPrefix(v[:])
+}
+
+// Gets the string representation of the signature without a 0x prefix.
 func (v ValidatorSignature) String() string {
 	return v.Hex()
 }

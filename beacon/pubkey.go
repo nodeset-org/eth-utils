@@ -1,6 +1,7 @@
 package beacon
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/goccy/go-json"
@@ -15,12 +16,17 @@ const (
 // A validator's pubkey key
 type ValidatorPubkey [ValidatorPubkeyLength]byte
 
-// Gets the string representation of the pubkey with a 0x prefix.
+// Gets the string representation of the pubkey without a 0x prefix.
 func (v ValidatorPubkey) Hex() string {
-	return common.EncodeHexWithPrefix(v[:])
+	return hex.EncodeToString(v[:])
 }
 
 // Gets the string representation of the pubkey with a 0x prefix.
+func (v ValidatorPubkey) HexWithPrefix() string {
+	return common.EncodeHexWithPrefix(v[:])
+}
+
+// Gets the string representation of the pubkey without a 0x prefix.
 func (v ValidatorPubkey) String() string {
 	return v.Hex()
 }
