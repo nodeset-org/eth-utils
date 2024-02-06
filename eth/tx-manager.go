@@ -76,6 +76,16 @@ func (t *TransactionManager) GetSafeGasLimit(estimate uint64) (uint64, error) {
 
 // Simulates the transaction, getting the expected and safe gas limits in gwei.
 func (t *TransactionManager) SimulateTransaction(client IExecutionClient, to common.Address, opts *bind.TransactOpts, input []byte) SimulationResult {
+	// Handle requests without opts
+	if opts == nil {
+		return SimulationResult{
+			IsSimulated:       false,
+			EstimatedGasLimit: 0,
+			SafeGasLimit:      0,
+			SimulationError:   "",
+		}
+	}
+
 	// Estimate gas limit
 	gasLimit, err := client.EstimateGas(context.Background(), ethereum.CallMsg{
 		From:      opts.From,
@@ -86,15 +96,29 @@ func (t *TransactionManager) SimulateTransaction(client IExecutionClient, to com
 		Data:      input,
 	})
 	if err != nil {
-		return SimulationResult{0, 0, fmt.Sprintf("%s: %s", gasSimErrorPrefix, normalizeRevertMessage(err).Error())}
+		return SimulationResult{
+			IsSimulated:       true,
+			EstimatedGasLimit: 0,
+			SafeGasLimit:      0,
+			SimulationError:   fmt.Sprintf("%s: %s", gasSimErrorPrefix, normalizeRevertMessage(err).Error())}
 	}
 
 	// Get a safe gas limit
 	safeLimit, err := t.GetSafeGasLimit(gasLimit)
 	if err != nil {
-		return SimulationResult{0, 0, fmt.Sprintf("error estimating gas limit: %s", err.Error())}
+		return SimulationResult{
+			IsSimulated:       true,
+			EstimatedGasLimit: 0,
+			SafeGasLimit:      0,
+			SimulationError:   fmt.Sprintf("error estimating gas limit: %s", err.Error()),
+		}
 	}
-	return SimulationResult{gasLimit, safeLimit, ""}
+	return SimulationResult{
+		IsSimulated:       true,
+		EstimatedGasLimit: gasLimit,
+		SafeGasLimit:      safeLimit,
+		SimulationError:   "",
+	}
 }
 
 // ===================

@@ -9,6 +9,9 @@ import (
 
 // Information about a transaction's simulation
 type SimulationResult struct {
+	// True if the transaction was simulated, false if it was not
+	IsSimulated bool `json:"isSimulated"`
+
 	// The raw amount of gas, in gwei, the transaction took during simulation
 	EstimatedGasLimit uint64 `json:"estimatedGasLimit"`
 
